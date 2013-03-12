@@ -37,7 +37,7 @@ module Amanda
       read_posts_from_disk.each do |post|
         redis.set "post:#{post.id}", post.to_json
         redis.sadd "posts", "post:#{post.id}"
-        redis.set "post:last", "post:#{post.id}"
+        redis.set "posts:last", "post:#{post.id}"
       end
     end
 
