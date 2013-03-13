@@ -1,6 +1,7 @@
 require 'yaml'
 require 'json'
 require 'redis'
+require 'dropbox_sdk'
 
 module Amanda
 
@@ -10,6 +11,7 @@ module Amanda
     POSTS_KEY = "posts"
     POSTS_LAST_KEY = "posts:last"
     POSTS_ALL_KEY = "posts:all"
+    DROPBOX = "dropbox"
 
     attr_accessor :config_file
 
@@ -21,6 +23,17 @@ module Amanda
 
     def path
       @path ||= config.fetch("posts_path")
+    end
+
+    def dropbox_settings
+      config.fetch("dropbox")
+    end
+
+    def dropbox_session(session=nil)
+      if session
+        redis.set(DROPBOX, session.serialize)
+      end
+      DropboxSession.deserialize(redis.get(DROPBOX))
     end
 
     def redis
@@ -59,11 +72,15 @@ module Amanda
     end
 
     def store_posts_in_redis
-      read_posts_from_disk.each do |post|
-        redis.set "#{POST_KEY_PREFIX}#{post.id}", post.to_json
-        redis.sadd POSTS_KEY, "#{POST_KEY_PREFIX}#{post.id}"
-        redis.set POSTS_LAST_KEY, "#{POST_KEY_PREFIX}#{post.id}"
-        redis.rpush POSTS_ALL_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+      rposts = read_posts_from_disk
+      if rposts.any?
+        redis.flushdb
+        rposts.each do |post|
+          redis.set "#{POST_KEY_PREFIX}#{post.id}", post.to_json
+          redis.sadd POSTS_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+          redis.set POSTS_LAST_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+          redis.rpush POSTS_ALL_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+        end
       end
     end
 
