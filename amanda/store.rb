@@ -94,7 +94,7 @@ module Amanda
     def read_posts_from_disk
       posts = []
       Dir.glob(File.join(path, "*")).each do |post_file|
-        if post_file =~ /\d{8}-\d{4}\.md$/
+        if post_file =~ /\d{8}\d{4}\.md$/
           posts << Post.parse_from_file(post_file)
         end
       end
