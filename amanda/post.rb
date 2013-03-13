@@ -2,6 +2,8 @@ require 'json'
 
 module Amanda
 
+  class Error < StandardError; end;
+
   class Post
 
     attr_accessor :id, :title, :published, :date, :tags, :content
@@ -17,6 +19,8 @@ module Amanda
         post.send("#{attr}=", data[attr])
       end
       post
+    rescue
+      raise Amanda::Error.new(data.inspect)
     end
 
     def to_json
