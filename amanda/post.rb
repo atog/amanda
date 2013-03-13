@@ -31,8 +31,12 @@ module Amanda
       @tags.split(",").map(&:strip) if @tags
     end
 
+    def self.id_from_filename(filename)
+      File.basename(filename, ".md")
+    end
+
     def self.parse(filename, contents="")
-      post = Post.new(File.basename(filename, ".md"))
+      post = Post.new(id_from_filename(filename))
       contents = contents.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
       contents.split("\n").each do |line|
         unless head = match_header(post, line)
@@ -43,7 +47,7 @@ module Amanda
     end
 
     def self.parse_from_file(filename)
-      post = Post.new(File.basename(filename, ".md"))
+      post = Post.new(id_from_filename(filename))
       IO.readlines(filename).each do |line|
         line = line.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
         unless head = match_header(post, line)

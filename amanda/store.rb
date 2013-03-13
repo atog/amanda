@@ -9,6 +9,7 @@ module Amanda
 
     POST_KEY_PREFIX = "post:"
     POSTS_KEY = "posts"
+    POST_REV_PREFIX = "rev:post:"
     POSTS_LAST_KEY = "posts:last"
     POSTS_RANDOM = "posts:random"
     DROPBOX = "dropbox"
@@ -61,12 +62,23 @@ module Amanda
       post(redis.get("posts:last"))
     end
 
+    def changed?(post_id, rev)
+      if stored_rev = redis.get("#{POST_REV_PREFIX}#{post_id}")
+        return stored_rev != rev
+      else
+        redis.set "#{POST_REV_PREFIX}#{post_id}", rev
+        return true
+      end
+    end
+
     def read_posts_from_dropbox
       posts = []
       client = DropboxClient.new(dropbox_session, :app_folder)
-      client.metadata('/')["contents"].map{|f| f["path"]}.select{|f| f =~ /\d{12}\.md$/}.each do |path|
-        contents, meta = client.get_file_and_metadata(path)
-        posts << Post.parse(path, contents)
+      client.metadata('/')["contents"].map{|f| [f["path"], f["rev"]]}.select{|f| f[0] =~ /\d{12}\.md$/}.each do |path|
+        if changed?(Post.id_from_filename(path[0]), path[1])
+          contents, meta = client.get_file_and_metadata(path[0])
+          posts << Post.parse(path[0], contents)
+        end
       end
       posts
     end
