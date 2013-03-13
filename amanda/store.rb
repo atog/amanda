@@ -10,7 +10,7 @@ module Amanda
     POST_KEY_PREFIX = "post:"
     POSTS_KEY = "posts"
     POSTS_LAST_KEY = "posts:last"
-    POSTS_ALL_KEY = "posts:all"
+    POSTS_RANDOM = "posts:random"
     DROPBOX = "dropbox"
 
     attr_accessor :config_file
@@ -50,11 +50,11 @@ module Amanda
     end
 
     def posts
-      redis.lrange(POSTS_ALL_KEY, 0, -1).map{|p| post(p)}
+      redis.zrange(POSTS_KEY, 0, -1).map{|p| post(p)}
     end
 
     def random
-      post(redis.srandmember(POSTS_KEY, 1))
+      post(redis.srandmember(POSTS_RANDOM, 1))
     end
 
     def last
@@ -64,7 +64,7 @@ module Amanda
     def read_posts_from_dropbox
       posts = []
       client = DropboxClient.new(dropbox_session, :app_folder)
-      client.metadata('/')["contents"].map{|f| f["path"]}.select{|f| f =~ /\d{8}-\d{4}\.md$/}.each do |path|
+      client.metadata('/')["contents"].map{|f| f["path"]}.select{|f| f =~ /\d{12}\.md$/}.each do |path|
         contents, meta = client.get_file_and_metadata(path)
         posts << Post.parse(path, contents)
       end
@@ -91,12 +91,11 @@ module Amanda
 
     def store_posts_in_redis(rposts)
       if rposts.any?
-        redis.del(POSTS_ALL_KEY)
         rposts.each do |post|
           redis.set "#{POST_KEY_PREFIX}#{post.id}", post.to_json
-          redis.sadd POSTS_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+          redis.zadd POSTS_KEY, post.id, "#{POST_KEY_PREFIX}#{post.id}"
+          redis.sadd POSTS_RANDOM, "#{POST_KEY_PREFIX}#{post.id}"
           redis.set POSTS_LAST_KEY, "#{POST_KEY_PREFIX}#{post.id}"
-          redis.rpush POSTS_ALL_KEY, "#{POST_KEY_PREFIX}#{post.id}"
         end
       end
     end
