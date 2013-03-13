@@ -61,20 +61,37 @@ module Amanda
       post(redis.get("posts:last"))
     end
 
+    def read_posts_from_dropbox
+      posts = []
+      client = DropboxClient.new(dropbox_session, :app_folder)
+      client.metadata('/')["contents"].map{|f| f["path"]}.select{|f| f =~ /\d{8}-\d{4}\.md$/}.each do |path|
+        contents, meta = client.get_file_and_metadata(path)
+        posts << Post.parse(path, contents)
+      end
+      posts
+    end
+
+    def refresh_from_dropbox
+      store_posts_in_redis(read_posts_from_dropbox)
+    end
+
+    def refresh_from_disk
+      store_posts_in_redis(read_posts_from_disk)
+    end
+
     def read_posts_from_disk
       posts = []
       Dir.glob(File.join(path, "*")).each do |post_file|
         if post_file =~ /\d{8}-\d{4}\.md$/
-          posts << Post.parse(post_file)
+          posts << Post.parse_from_file(post_file)
         end
       end
       posts
     end
 
-    def store_posts_in_redis
-      rposts = read_posts_from_disk
+    def store_posts_in_redis(rposts)
       if rposts.any?
-        redis.flushdb
+        redis.del(POSTS_ALL_KEY)
         rposts.each do |post|
           redis.set "#{POST_KEY_PREFIX}#{post.id}", post.to_json
           redis.sadd POSTS_KEY, "#{POST_KEY_PREFIX}#{post.id}"

@@ -25,6 +25,13 @@ module Amanda::Controllers
     end
   end
 
+  class Refresh < R '/refresh'
+    def get
+      STORE.refresh_from_dropbox
+      redirect "/"
+    end
+  end
+
   class Archive < R '/archive'
     def get
       render :archive

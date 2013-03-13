@@ -31,7 +31,18 @@ module Amanda
       @tags.split(",").map(&:strip) if @tags
     end
 
-    def self.parse(filename)
+    def self.parse(filename, contents="")
+      post = Post.new(File.basename(filename, ".md"))
+      contents = contents.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+      contents.split("\n").each do |line|
+        unless head = match_header(post, line)
+          post.content << line rescue post.content = line
+        end
+      end
+      post
+    end
+
+    def self.parse_from_file(filename)
       post = Post.new(File.basename(filename, ".md"))
       IO.readlines(filename).each do |line|
         line = line.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)

@@ -16,7 +16,7 @@ describe Amanda::Store do
 
   it "should store posts in redis" do
     store = Amanda::Store.new("amanda_test.yml")
-    store.store_posts_in_redis
+    store.refresh_from_disk
     assert first_key = store.keys("#{Amanda::Store::POST_KEY_PREFIX}*").first
     post = Amanda::Post.from_json(store.redis.get(first_key))
     assert_equal first_key, "#{Amanda::Store::POST_KEY_PREFIX}#{post.id}"
@@ -24,27 +24,27 @@ describe Amanda::Store do
 
   it "should return one post" do
     store = Amanda::Store.new("amanda_test.yml")
-    store.store_posts_in_redis
+    store.refresh_from_disk
     assert first_key = store.keys("#{Amanda::Store::POST_KEY_PREFIX}*").first
     assert store.post(first_key)
   end
 
   it "should return random post" do
     store = Amanda::Store.new("amanda_test.yml")
-    store.store_posts_in_redis
+    store.refresh_from_disk
     assert first_key = store.keys("#{Amanda::Store::POST_KEY_PREFIX}*").first
     assert store.random
   end
 
   it "should return all posts" do
     store = Amanda::Store.new("amanda_test.yml")
-    store.store_posts_in_redis
+    store.refresh_from_disk
     assert store.posts.any?
   end
 
   it "should return last post" do
     store = Amanda::Store.new("amanda_test.yml")
-    store.store_posts_in_redis
+    store.refresh_from_disk
     assert first_key = store.keys("#{Amanda::Store::POST_KEY_PREFIX}*").first
     assert store.last
   end
