@@ -13,6 +13,7 @@ GEM
     json (1.7.7)
     mab (0.0.2)
     rack (1.5.2)
+    rdiscount (2.0.7.1)
     redis (3.0.3)
     thin (1.5.0)
       daemons (>= 1.0.9)
@@ -29,5 +30,6 @@ DEPENDENCIES
   dropbox-sdk (= 1.5.1)
   foreman
   mab (= 0.0.2)
+  rdiscount (~> 2.0.7.1)
   redis (= 3.0.3)
   thin
