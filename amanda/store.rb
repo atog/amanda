@@ -47,6 +47,7 @@ module Amanda
     end
 
     def post(redis_post_id)
+      redis_post_id = "#{POST_KEY_PREFIX}#{redis_post_id}" unless redis_post_id =~ /^#{POST_KEY_PREFIX}/
       Post.from_json(redis.get(redis_post_id))
     end
 
