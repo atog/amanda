@@ -26,7 +26,7 @@ PLATFORMS
 DEPENDENCIES
   bundler
   camping (= 2.1.523)
-  dropbox-sdk
+  dropbox-sdk (= 1.5.1)
   foreman
   mab (= 0.0.2)
   redis (= 3.0.3)
