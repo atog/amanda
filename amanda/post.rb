@@ -44,7 +44,7 @@ module Amanda
       contents = contents.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
       contents.split("\n").each do |line|
         unless head = match_header(post, line)
-          post.content << line rescue post.content = line
+          post.content << "\n#{line}" rescue post.content = line
         end
       end
       post
