@@ -25,6 +25,13 @@ module Amanda::Controllers
     end
   end
 
+  class Post < R '/(\d{4})/(\d{2})/(\d{2})/(\d{4})(/?.*)?'
+    def get(year, month, day, time, rest)
+      @post = STORE.post("#{year}#{month}#{day}#{time}")
+      render :single
+    end
+  end
+
   class Refresh < R '/refresh'
     def get
       STORE.refresh_from_dropbox
@@ -75,9 +82,13 @@ module Amanda::Views
     STORE.keys "*"
   end
 
+  def single
+    @post.title
+  end
+
   def archive
     ul do
-      STORE.posts.map {|p| li(p.title)}
+      STORE.posts.map {|p| li {a(href: URL(p.to_param).to_s, title: p.title) { p.title }}}
     end
   end
 end
