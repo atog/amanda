@@ -8,6 +8,7 @@ require 'rack'
 require 'camping'
 require 'camping/session'
 require 'dropbox_sdk'
+require 'rdiscount'
 
 Camping.goes :Amanda
 
@@ -74,8 +75,20 @@ module Amanda::Views
       head do
         title { "AMANDA" }
       end
-      body { self << yield }
+      body do
+        div.container! do
+          div.header! { render_header }
+          self << yield
+          div.footer! { render_footer }
+        end
+      end
     end
+  end
+
+  def render_header
+  end
+
+  def render_footer
   end
 
   def index
@@ -83,11 +96,15 @@ module Amanda::Views
   end
 
   def single
-    @post.title
+    div.post! do
+      h2 @post.title
+      div.content! { RDiscount.new(@post.content, :smart).to_html }
+      div.meta! @post.id
+    end
   end
 
   def archive
-    ul do
+    ul class: "archive-list" do
       STORE.posts.map {|p| li {a(href: URL(p.to_param).to_s, title: p.title) { p.title }}}
     end
   end
