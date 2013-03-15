@@ -20,6 +20,18 @@ module Amanda
 end
 
 module Amanda::Controllers
+  class Style < R '/s/(.+)'
+    PATH = File.expand_path(File.dirname(__FILE__))
+    def get(path)
+      unless path.include? ".." # prevent directory traversal attacks
+        serve "#{path}", File.read("#{PATH}/s/#{path}")
+      else
+        @status = "403"
+        "403 - Invalid path"
+      end
+    end
+  end
+
   class Index < R '/'
     def get
       @last = STORE.last
@@ -75,7 +87,10 @@ module Amanda::Views
   def layout
     doctype!
     html do
-      head { title { "AMANDA" } }
+      head do
+       title { "AMANDA" }
+       link rel: "stylesheet", type: "text/css", href: "/s/m.css"
+      end
       body do
         div.container! do
           div.header! { render_header }
@@ -93,7 +108,7 @@ module Amanda::Views
   end
 
   def index
-    div.post! do
+    div.post! class: "last" do
       h2 @last.title
       div.content! { RDiscount.new(@last.content, :smart).to_html }
       div.meta! @last.id
