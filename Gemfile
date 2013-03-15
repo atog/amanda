@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 gem 'bundler'
-gem 'camping', '2.1.523'
 gem 'mab', '0.0.2'
+gem 'camping', '2.1.531'
 gem 'thin'
 gem 'foreman'
 gem 'redis', '3.0.3'

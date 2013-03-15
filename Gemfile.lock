@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    camping (2.1.523)
+    camping (2.1.531)
       mab
       rack (>= 1.0)
     daemons (1.1.9)
@@ -26,7 +26,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler
-  camping (= 2.1.523)
+  camping (= 2.1.531)
   dropbox-sdk (= 1.5.1)
   foreman
   mab (= 0.0.2)

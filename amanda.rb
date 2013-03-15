@@ -71,10 +71,9 @@ end
 
 module Amanda::Views
   def layout
+    doctype!
     html do
-      head do
-        title { "AMANDA" }
-      end
+      head { title { "AMANDA" } }
       body do
         div.container! do
           div.header! { render_header }
