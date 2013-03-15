@@ -56,11 +56,11 @@ module Amanda
     end
 
     def random
-      post(redis.srandmember(POSTS_RANDOM, 1))
+      post(redis.srandmember(POSTS_RANDOM))
     end
 
     def last
-      post(redis.get("posts:last"))
+      post(redis.get(POSTS_LAST_KEY))
     end
 
     def changed?(post_id, rev)

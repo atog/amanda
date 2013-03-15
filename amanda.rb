@@ -22,6 +22,8 @@ end
 module Amanda::Controllers
   class Index < R '/'
     def get
+      @last = STORE.last
+      @random = STORE.random
       render :index
     end
   end
@@ -91,7 +93,16 @@ module Amanda::Views
   end
 
   def index
-    STORE.keys "*"
+    div.post! do
+      h2 @last.title
+      div.content! { RDiscount.new(@last.content, :smart).to_html }
+      div.meta! @last.id
+    end
+    div.post! do
+      h2 @random.title
+      div.content! { RDiscount.new(@random.content, :smart).to_html }
+      div.meta! @random.id
+    end
   end
 
   def single
