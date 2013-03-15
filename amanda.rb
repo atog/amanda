@@ -88,7 +88,7 @@ module Amanda::Views
     doctype!
     html do
       head do
-       title { "AMANDA" }
+       title { defined?(@post) && @post ? @post.title : "AMANDA" }
        link rel: "stylesheet", type: "text/css", href: "/s/m.css"
       end
       body do
@@ -105,6 +105,7 @@ module Amanda::Views
   end
 
   def render_footer
+
   end
 
   def index
