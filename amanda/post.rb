@@ -1,4 +1,5 @@
 require 'json'
+require 'rdiscount'
 
 module Amanda
 
@@ -23,7 +24,15 @@ module Amanda
       raise Amanda::Error.new(data.inspect)
     end
 
-    def to_param
+    def published_at
+      @published_at ||= Time.mktime(*(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/.match(id).captures))
+    end
+
+    def html
+      @html ||= RDiscount.new(content, :smart).to_html
+    end
+
+    def url
       "/#{id.gsub(/(\d{4})(\d{2})(\d{2})(\d{4})/, "\\1/\\2/\\3/\\4")}/#{parameterize(title)}"
     end
 

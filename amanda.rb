@@ -3,12 +3,12 @@ Encoding.default_internal = Encoding::UTF_8
 
 require_relative 'amanda/post'
 require_relative 'amanda/store'
+require_relative 'amanda/feed'
 
 require 'rack'
 require 'camping'
 require 'camping/session'
 require 'dropbox_sdk'
-require 'rdiscount'
 
 Camping.goes :Amanda
 
@@ -57,6 +57,12 @@ module Amanda::Controllers
   class Archive < R '/archive'
     def get
       render :archive
+    end
+  end
+
+  class Feed < R '/feed'
+    def get
+      Amanda::Feed.rss STORE.posts, title: "Koen Van der Auwera's blog", author: "Koen Van der Auwera", url: URL("/").to_s
     end
   end
 
@@ -111,12 +117,12 @@ module Amanda::Views
   def index
     div.post! class: "last" do
       h2 @last.title
-      div.content! { RDiscount.new(@last.content, :smart).to_html }
+      div.content! { @last.html }
       div.meta! @last.id
     end
     div.post! do
       h2 @random.title
-      div.content! { RDiscount.new(@random.content, :smart).to_html }
+      div.content! { @random.html }
       div.meta! @random.id
     end
   end
@@ -124,14 +130,14 @@ module Amanda::Views
   def single
     div.post! do
       h2 @post.title
-      div.content! { RDiscount.new(@post.content, :smart).to_html }
+      div.content! { @post.html }
       div.meta! @post.id
     end
   end
 
   def archive
     ul class: "archive-list" do
-      STORE.posts.map {|p| li {a(href: URL(p.to_param).to_s, title: p.title) { p.title }}}
+      STORE.posts.map {|p| li {a(href: URL(p.url).to_s, title: p.title) { p.title }}}
     end
   end
 end
