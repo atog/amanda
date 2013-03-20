@@ -12,12 +12,11 @@ require 'dropbox_sdk'
 
 Camping.goes :Amanda
 
-
-STORE = Amanda::Store.new("amanda.yml")
-
 module Amanda
   set :secret, "Some super secret, even more. No. MORE!"
   include Camping::Session
+
+  $store = Amanda::Store.new("amanda.yml")
 end
 
 module Amanda::Controllers
@@ -35,10 +34,10 @@ module Amanda::Controllers
 
   class Index < R '/'
     def get
-      @last = STORE.last
-      @random = STORE.random
+      @last = $store.last
+      @random = $store.random
       while @random.id == @last.id
-        @random =  STORE.random
+        @random =  $store.random
       end
       render :index
     end
@@ -46,14 +45,14 @@ module Amanda::Controllers
 
   class Post < R '/(\d{4})/(\d{2})/(\d{2})/(\d{4})(/?.*)?'
     def get(year, month, day, time, rest)
-      @post = STORE.post("#{year}#{month}#{day}#{time}")
+      @post = $store.post("#{year}#{month}#{day}#{time}")
       render :single
     end
   end
 
   class Refresh < R '/refresh'
     def get
-      STORE.refresh_from_dropbox
+      $store.refresh_from_dropbox
       redirect "/"
     end
   end
@@ -66,7 +65,7 @@ module Amanda::Controllers
 
   class Feed < R '/feed'
     def get
-      Amanda::Feed.rss STORE.posts, title: "Koen Van der Auwera's blog", author: "Koen Van der Auwera", url: URL("/").to_s
+      Amanda::Feed.rss $store.posts, title: "Koen Van der Auwera's blog", author: "Koen Van der Auwera", url: URL("/").to_s
     end
   end
 
@@ -83,7 +82,7 @@ module Amanda::Controllers
     def get
       if session = @state["dropbox"]
         session.get_access_token
-        STORE.dropbox_session(session)
+        $store.dropbox_session(session)
         redirect "/"
       else
         "TUUT"
@@ -141,7 +140,7 @@ module Amanda::Views
 
   def archive
     ul class: "archive-list" do
-      STORE.posts.map {|p| li {a(href: URL(p.url).to_s, title: p.title) { p.title }}}
+      $store.posts.map {|p| li {a(href: URL(p.url).to_s, title: p.title) { p.title }}}
     end
   end
 end
