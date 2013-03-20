@@ -37,6 +37,9 @@ module Amanda::Controllers
     def get
       @last = STORE.last
       @random = STORE.random
+      while @random.id == @last.id
+        @random =  STORE.random
+      end
       render :index
     end
   end
