@@ -1,6 +1,7 @@
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
+require_relative 'amanda/helper'
 require_relative 'amanda/post'
 require_relative 'amanda/store'
 require_relative 'amanda/feed'
@@ -50,6 +51,20 @@ module Amanda::Controllers
     end
   end
 
+  class Tag < R '/tag/(.+)'
+    def get(tag)
+      @posts = $store.posts_for_tag(tag)
+      render :multiple
+    end
+  end
+
+  class Tags < R '/tags'
+    def get
+      @tags = $store.tags
+      render :tags
+    end
+  end
+
   class Refresh < R '/refresh'
     def get
       $store.refresh_from_dropbox
@@ -83,7 +98,7 @@ module Amanda::Controllers
       if session = @state["dropbox"]
         session.get_access_token
         $store.dropbox_session(session)
-        redirect "/"
+        redirect "/refresh"
       else
         "TUUT"
       end
@@ -93,6 +108,8 @@ module Amanda::Controllers
 end
 
 module Amanda::Views
+  include Amanda::Helper
+
   def layout
     doctype!
     html do
@@ -114,7 +131,14 @@ module Amanda::Views
   end
 
   def render_footer
+  end
 
+  def render_post(post)
+    div.post! do
+      h2 post.title
+      div.content! { post.html }
+      div.meta! post.id
+    end
   end
 
   def index
@@ -131,10 +155,18 @@ module Amanda::Views
   end
 
   def single
-    div.post! do
-      h2 @post.title
-      div.content! { @post.html }
-      div.meta! @post.id
+    render_post(@post)
+  end
+
+  def multiple
+    @posts.each do |post|
+      render_post post
+    end
+  end
+
+  def tags
+    ul class: "tag-list" do
+      @tags.map {|t| li {a(href: URL("tag/#{parameterize(t)}").to_s, title: t) { t }}}
     end
   end
 

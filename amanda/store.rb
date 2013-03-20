@@ -6,6 +6,7 @@ require 'dropbox_sdk'
 module Amanda
 
   class Store
+    include Helper
 
     POST_KEY_PREFIX = "post:"
     POSTS_KEY = "posts"
@@ -13,6 +14,8 @@ module Amanda
     POSTS_LAST_KEY = "posts:last"
     POSTS_RANDOM = "posts:random"
     DROPBOX = "dropbox"
+    TAGS_KEY = "tags"
+    TAG_KEY_PREFIX = "tag:"
 
     attr_accessor :config_file
 
@@ -43,6 +46,15 @@ module Amanda
 
     def keys(pattern="*")
       redis.keys(pattern)
+    end
+
+    def tags
+      redis.smembers TAGS_KEY
+    end
+
+    def posts_for_tag(tag)
+      redis_tag_id = "#{TAG_KEY_PREFIX}#{tag}" unless redis_tag_id =~ /^#{TAG_KEY_PREFIX}/
+      redis.zrange(redis_tag_id, 0, -1).map{|p| post(p)}
     end
 
     def post(redis_post_id)
@@ -108,6 +120,10 @@ module Amanda
           redis.zadd POSTS_KEY, post.id, "#{POST_KEY_PREFIX}#{post.id}"
           redis.sadd POSTS_RANDOM, "#{POST_KEY_PREFIX}#{post.id}"
           redis.set POSTS_LAST_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+          post.tags_to_arr.each do |tag|
+            redis.sadd TAGS_KEY, tag
+            redis.zadd "#{TAG_KEY_PREFIX}#{parameterize(tag)}", post.id, "#{POST_KEY_PREFIX}#{post.id}"
+          end
         end
       end
     end
