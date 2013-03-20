@@ -38,8 +38,7 @@ module Amanda
     end
 
     def redis
-      @redis ||= ::Redis.new(host: config.fetch("redis").fetch("host", "localhost"),
-                             port: config.fetch("redis").fetch("port", 6379))
+      @redis ||= ::Redis.new(host: ENV["OPENREDIS_URL"])
     end
 
     def keys(pattern="*")

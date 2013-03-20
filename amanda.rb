@@ -12,6 +12,7 @@ require 'dropbox_sdk'
 
 Camping.goes :Amanda
 
+
 STORE = Amanda::Store.new("amanda.yml")
 
 module Amanda
@@ -68,7 +69,7 @@ module Amanda::Controllers
 
   class Authorize < R '/authorize'
     def get
-      session = DropboxSession.new(STORE.dropbox_settings.fetch("app_key"), STORE.dropbox_settings.fetch("app_secret"))
+      session = DropboxSession.new(ENV["DROPBOX_APP_KEY"], ENV["DROPBOX_APP_SECRET"])
       session.get_request_token
       @state["dropbox"] = session
       redirect session.get_authorize_url(URL("/authorized").to_s)
