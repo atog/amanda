@@ -26,11 +26,12 @@ div#container a {
   text-decoration: none;
   padding-bottom: 1px;
   color: #363637;
-  border-bottom: 1px solid #DBDADC;
+  border-bottom: 1px solid #FF007C;
 }
 
 div#container a:hover {
-  border-bottom: 3px solid #363637;
+  border-bottom: 3px solid #FF007C;
+  color: #FF007C;
 }
 
 div#nav {
@@ -87,4 +88,8 @@ div#footer {
 div#footer p {
   display: inline;
   margin: 0 5px;
+}
+
+div#container a.last {
+  color: #FF007C;
 }

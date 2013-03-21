@@ -46,6 +46,7 @@ module Amanda::Controllers
   class Post < R '/(\d{4})/(\d{2})/(\d{2})/(\d{4})(/?.*)?'
     def get(year, month, day, time, rest)
       @post = $store.post("#{year}#{month}#{day}#{time}")
+      @last = $store.last
       render :single
     end
   end
@@ -131,7 +132,7 @@ module Amanda::Views
     div.nav! do
       ul class: "nav-list" do
         li {a(href: URL("/").to_s, title: "Home") { "Home" }}
-        li {a(href: URL("/archive").to_s, title: "Archive") { "Archive" }}
+        li {a(href: URL("/archive").to_s, title: "Archief") { "Archief" }}
         li {a(href: URL("/tags").to_s, title: "Tags") { "Tags" }}
       end
     end
@@ -165,6 +166,7 @@ module Amanda::Views
   end
 
   def single
+    p {a(href: URL(@last.url).to_s, title: @last.title, class: "last") { "Laatste: #{@last.title}" }} unless @last.id == @post.id
     render_post(@post)
   end
 
