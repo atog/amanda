@@ -127,9 +127,23 @@ module Amanda::Views
   end
 
   def render_header
+    div.nav! do
+      ul class: "nav-list" do
+        li {a(href: URL("/").to_s, title: "Home") { "Home" }}
+        li {a(href: URL("/archive").to_s, title: "Archive") { "Archive" }}
+        li {a(href: URL("/tags").to_s, title: "Tags") { "Tags" }}
+      end
+    end
   end
 
   def render_footer
+    p do
+      "Powered by " +
+      a(href: "#", title: "Amanda"){ "Amanda" }
+    end
+    p do
+      "&copy; 2003 - 2013 Koen Van der Auwera"
+    end
   end
 
   def render_post(post)
