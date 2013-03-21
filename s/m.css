@@ -6,6 +6,12 @@ body {
   font-family: "Trebuchet MS", Helvetica, sans-serif
 }
 
+ul.nav-list, ul.tag-list, ul.archive-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
 div#container {
   margin: 0;
   padding: 0;
@@ -30,11 +36,13 @@ div#container a:hover {
 div#nav {
   width: 500px;
   margin: 0 auto;
+  text-align: right;
 }
 
-div#nav ul {
-  margin: 0;
-  padding: 0;
+div#nav li {
+  display: inline;
+  margin: 20px;
+  padding: 20px;
 }
 
 div#content {
