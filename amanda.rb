@@ -113,13 +113,14 @@ module Amanda::Views
     doctype!
     html do
       head do
-       title { defined?(@post) && @post ? @post.title : "AMANDA" }
-       link rel: "stylesheet", type: "text/css", href: "/s/m.css"
+        meta charset: "utf-8"
+        title { defined?(@post) && @post ? @post.title : "AMANDA" }
+        link rel: "stylesheet", type: "text/css", href: "/s/m.css"
       end
       body do
         div.container! do
           div.header! { render_header }
-          self << yield
+          div.content! { self << yield }
           div.footer! { render_footer }
         end
       end
@@ -148,7 +149,7 @@ module Amanda::Views
 
   def render_post(post)
     div.post! do
-      h2 post.title
+      h2 {a(href: URL(post.url).to_s, title: post.title) { post.title }}
       div.content! { post.html }
       div.meta! post.id
     end
@@ -156,15 +157,11 @@ module Amanda::Views
 
   def index
     div.post! class: "last" do
-      h2 @last.title
+      h2 {a(href: URL(@last.url).to_s, title: @last.title) { @last.title }}
       div.content! { @last.html }
       div.meta! @last.id
     end
-    div.post! do
-      h2 @random.title
-      div.content! { @random.html }
-      div.meta! @random.id
-    end
+    render_post @random
   end
 
   def single
