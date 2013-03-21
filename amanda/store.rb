@@ -17,22 +17,6 @@ module Amanda
     TAGS_KEY = "tags"
     TAG_KEY_PREFIX = "tag:"
 
-    attr_accessor :config_file
-
-    def initialize(config_file) @config_file = config_file; end;
-
-    def config
-      @config ||= YAML.load_file(config_file)
-    end
-
-    def path
-      @path ||= config.fetch("posts_path")
-    end
-
-    def dropbox_settings
-      config.fetch("dropbox")
-    end
-
     def dropbox_session(session=nil)
       if session
         redis.set(DROPBOX, session.serialize)
@@ -105,7 +89,7 @@ module Amanda
 
     def read_posts_from_disk
       posts = []
-      Dir.glob(File.join(path, "*")).each do |post_file|
+      Dir.glob(File.join(ENV["PATH"], "*")).each do |post_file|
         if post_file =~ /\d{8}\d{4}\.md$/
           posts << Post.parse_from_file(post_file)
         end

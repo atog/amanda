@@ -1,23 +1,22 @@
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-require_relative 'amanda/helper'
-require_relative 'amanda/post'
-require_relative 'amanda/store'
-require_relative 'amanda/feed'
-
 require 'rack'
 require 'camping'
 require 'camping/session'
 require 'dropbox_sdk'
+
+require_relative 'amanda/helper'
+require_relative 'amanda/post'
+require_relative 'amanda/store'
+require_relative 'amanda/feed'
 
 Camping.goes :Amanda
 
 module Amanda
   set :secret, "Some super secret, even more. No. MORE!"
   include Camping::Session
-
-  $store = Amanda::Store.new("amanda.yml")
+  $store = Amanda::Store.new
 end
 
 module Amanda::Controllers
