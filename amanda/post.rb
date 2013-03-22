@@ -8,7 +8,7 @@ module Amanda
   class Post
     include Helper
 
-    attr_accessor :id, :title, :published, :date, :tags, :content
+    attr_accessor :id, :title, :published, :date, :tags, :content, :slug
 
     def initialize(id=nil)
       @id = id
@@ -17,7 +17,7 @@ module Amanda
     def self.from_json(data)
       data = JSON.parse(data)
       post = Post.new
-      %w(id title published date tags content).each do |attr|
+      %w(id title published date tags content slug).each do |attr|
         post.send("#{attr}=", data[attr])
       end
       post
@@ -34,11 +34,11 @@ module Amanda
     end
 
     def url
-      "/#{id.gsub(/(\d{4})(\d{2})(\d{2})(\d{4})/, "\\1/\\2/\\3/\\4")}/#{parameterize(title)}"
+      "/#{id.gsub(/(\d{4})(\d{2})(\d{2})(\d{4})/, "\\1/\\2/\\3/\\4")}/#{slug || parameterize(title)}"
     end
 
     def to_json
-      {id: id, title: title, published: published, date: date, tags: tags, content: content}.to_json
+      {id: id, title: title, published: published, date: date, tags: tags, content: content, slug: slug}.to_json
     end
 
     def tags_to_arr
@@ -84,6 +84,7 @@ module Amanda
       when /^published:/i then obj.published = value[10..-1].strip; true
       when /^date:/i then obj.date = value[5..-1].strip; true
       when /^tags:/i then obj.tags = value[5..-1].strip; true
+      when /^slug:/i then obj.slug = value[5..-1].strip; true
       else
         false
       end
