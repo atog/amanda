@@ -93,3 +93,16 @@ div#footer p {
 div#container a.last {
   color: #FF007C;
 }
+
+div#meta {
+  font-size: 0.8em;
+  padding-top: 5px;
+  border-top: 2px solid #DBDADC;
+  color: #363637;
+  width: 350px;
+}
+
+hr {
+  border: 5px solid #FF007C;
+  margin: 2em 0;
+}

@@ -152,11 +152,15 @@ module Amanda::Views
     end
   end
 
+  def formatted_published_at(post)
+    post.id.gsub(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, "Laten vallen op \\3/\\2/\\1 om \\4:\\5u")
+  end
+
   def render_post(post)
     div.post! do
       h2 {a(href: URL(post.url).to_s, title: post.title) { post.title }}
       div.content! { post.html }
-      div.meta! post.id
+      div.meta! formatted_published_at(post)
     end
   end
 
@@ -164,8 +168,9 @@ module Amanda::Views
     div.post! class: "last" do
       h2 {a(href: URL(@last.url).to_s, title: @last.title) { @last.title }}
       div.content! { @last.html }
-      div.meta! @last.id
+      div.meta! formatted_published_at(@last)
     end
+    hr
     render_post @random
   end
 
@@ -175,8 +180,10 @@ module Amanda::Views
   end
 
   def multiple
-    @posts.each do |post|
+    count = @posts.length-1
+    @posts.each_with_index do |post, i|
       render_post post
+      hr if i < count
     end
   end
 
