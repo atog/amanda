@@ -22,6 +22,8 @@ module Amanda
         redis.set(DROPBOX, session.serialize)
       end
       DropboxSession.deserialize(redis.get(DROPBOX))
+    rescue
+      nil
     end
 
     def redis

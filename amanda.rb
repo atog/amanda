@@ -34,12 +34,16 @@ module Amanda::Controllers
 
   class Index < R '/'
     def get
-      @last = $store.last
-      @random = $store.random
-      while @random.id == @last.id
-        @random =  $store.random
+      if $store.dropbox_session
+        @last = $store.last
+        @random = $store.random
+        while @random.id == @last.id
+          @random =  $store.random
+        end
+        render :index
+      else
+        redirect "/authorize"
       end
-      render :index
     end
   end
 
