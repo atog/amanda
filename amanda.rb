@@ -16,6 +16,7 @@ Camping.goes :Amanda
 module Amanda
   set :secret, "Some super secret, even more. No. MORE!"
   include Camping::Session
+  include Amanda::Helper
   $store = Amanda::Store.new
 end
 
@@ -112,7 +113,6 @@ module Amanda::Controllers
 end
 
 module Amanda::Views
-  include Amanda::Helper
 
   def layout
     doctype!
@@ -152,15 +152,26 @@ module Amanda::Views
     end
   end
 
+  def render_meta(post)
+    formatted_published_at(post)
+  end
+
   def formatted_published_at(post)
     post.id.gsub(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, "Laten vallen op \\3/\\2/\\1 om \\4:\\5u")
+  end
+
+  def render_tags(tags)
+    ul class: "tag-list" do
+      tags.each {|t| li {a(href: URL("tag/#{parameterize(t)}").to_s, title: t) { t }}}
+    end
   end
 
   def render_post(post)
     div.post! do
       h2 {a(href: URL(post.url).to_s, title: post.title) { post.title }}
       div.content! { post.html }
-      div.meta! formatted_published_at(post)
+      div.meta! { render_meta(post) }
+      div.tags! { render_tags(post.tags_to_arr) }
     end
   end
 
@@ -168,7 +179,8 @@ module Amanda::Views
     div.post! class: "last" do
       h2 {a(href: URL(@last.url).to_s, title: @last.title) { @last.title }}
       div.content! { @last.html }
-      div.meta! formatted_published_at(@last)
+      div.meta! { render_meta(@last) }
+      div.tags! {render_tags(@last.tags_to_arr) }
     end
     hr
     render_post @random
@@ -188,14 +200,12 @@ module Amanda::Views
   end
 
   def tags
-    ul class: "tag-list" do
-      @tags.map {|t| li {a(href: URL("tag/#{parameterize(t)}").to_s, title: t) { t }}}
-    end
+    render_tags(@tags)
   end
 
   def archive
     ul class: "archive-list" do
-      $store.posts.map {|p| li {a(href: URL(p.url).to_s, title: p.title) { p.title }}}
+      $store.posts.each {|p| li {a(href: URL(p.url).to_s, title: p.title) { p.title }}}
     end
   end
 end

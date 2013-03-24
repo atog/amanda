@@ -106,3 +106,20 @@ hr {
   border: 5px solid #FF007C;
   margin: 2em 0;
 }
+
+div#tags li {
+  display: inline;
+  margin: 0 5px 0 0;
+  padding: 2px;
+  font-size: 0.8em;
+}
+
+div#tags a {
+  color: #363637;
+  border: none;
+}
+
+div#tags a:hover {
+  color: #FF007C;
+  border: none;
+}
