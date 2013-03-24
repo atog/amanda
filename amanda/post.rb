@@ -18,7 +18,7 @@ module Amanda
       data = JSON.parse(data)
       post = Post.new
       %w(id title published date tags content slug).each do |attr|
-        post.send("#{attr}=", data[attr])
+        post.send("#{attr}=", data[attr].encode('iso-8859-1', 'utf-8')) if data[attr]
       end
       post
     rescue
@@ -55,7 +55,7 @@ module Amanda
 
     def self.parse(filename, contents="")
       post = Post.new(id_from_filename(filename))
-      contents = contents.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+      contents = contents.force_encoding("iso-8859-1").encode("utf-8", replace: nil)
       contents.split("\n").each do |line|
         unless head = match_header(post, line)
           post.content << "\n#{line}" rescue post.content = line

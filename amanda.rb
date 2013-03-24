@@ -166,9 +166,12 @@ module Amanda::Views
     end
   end
 
-  def render_post(post)
+  def render_post(post, desc=nil)
     div.post! do
-      h2 {a(href: URL(post.url).to_s, title: post.title) { post.title }}
+      h2 do
+        a(href: URL(post.url).to_s, title: post.title) { post.title }
+        span(class: "desc") { desc } if desc
+      end
       div.content! { post.html }
       div.meta! { render_meta(post) }
       div.tags! { render_tags(post.tags_to_arr) }
@@ -177,13 +180,16 @@ module Amanda::Views
 
   def index
     div.post! class: "last" do
-      h2 {a(href: URL(@last.url).to_s, title: @last.title) { @last.title }}
+      h2 do
+        a(href: URL(@last.url).to_s, title: @last.title) { @last.title }
+        span(class: "desc") {"nieuw!"}
+      end
       div.content! { @last.html }
       div.meta! { render_meta(@last) }
       div.tags! {render_tags(@last.tags_to_arr) }
     end
     hr
-    render_post @random
+    render_post @random, "Random"
   end
 
   def single

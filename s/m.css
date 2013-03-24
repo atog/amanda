@@ -38,6 +38,7 @@ div#nav {
   width: 500px;
   margin: 0 auto;
   text-align: right;
+  text-transform: uppercase;
 }
 
 div#nav li {
@@ -58,11 +59,19 @@ div#content h2 {
   border-bottom: 2px solid #DBDADC;
   color: #363637;
   width: 350px;
+  text-transform: uppercase;
 }
 
 div#content h2 a, div#content h2 a:hover {
   border: 0;
   text-decoration: none;
+}
+
+div#content h2 span.desc {
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #FF007C;
+  margin-left: 1em;
 }
 
 div#content img {
