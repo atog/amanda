@@ -119,6 +119,9 @@ module Amanda::Views
     html do
       head do
         meta charset: "utf-8"
+        meta :"http-equiv" => "X-UA-Compatible", content: "IE=edge,chrome=1"
+        meta name: "description", content: "Koen Van der Auwera blog"
+        link rel: "alternate", type: "application/rss+xml", title: "RSS", href: URL("/feed").to_s
         title { defined?(@post) && @post ? @post.title : "AMANDA" }
         link rel: "stylesheet", type: "text/css", href: "/s/m.css"
       end
