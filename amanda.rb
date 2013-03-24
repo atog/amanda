@@ -165,7 +165,7 @@ module Amanda::Views
 
   def render_tags(tags)
     ul class: "tag-list" do
-      tags.each {|t| li {a(href: URL("tag/#{parameterize(t)}").to_s, title: t) { t }}}
+      tags.each {|t| li {a(href: URL("/tag/#{parameterize(t)}").to_s, title: t) { t }}}
     end
   end
 
