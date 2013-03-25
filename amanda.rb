@@ -91,10 +91,14 @@ module Amanda::Controllers
 
   class Authorize < R '/authorize'
     def get
-      session = DropboxSession.new(ENV["DROPBOX_APP_KEY"], ENV["DROPBOX_APP_SECRET"])
-      session.get_request_token
-      @state["dropbox"] = session
-      redirect session.get_authorize_url(URL("/authorized").to_s)
+      if $store.dropbox_session
+        redirect "/"
+      else
+        session = DropboxSession.new(ENV["DROPBOX_APP_KEY"], ENV["DROPBOX_APP_SECRET"])
+        session.get_request_token
+        @state["dropbox"] = session
+        redirect session.get_authorize_url(URL("/authorized").to_s)
+      end
     end
   end
 
