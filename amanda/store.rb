@@ -35,7 +35,7 @@ module Amanda
     end
 
     def tags
-      redis.smembers TAGS_KEY
+      redis.smembers(TAGS_KEY).sort!
     end
 
     def posts_for_tag(tag)
@@ -49,7 +49,7 @@ module Amanda
     end
 
     def posts
-      redis.zrange(POSTS_KEY, 0, -1).map{|p| post(p)}
+      redis.zrevrange(POSTS_KEY, 0, -1).map{|p| post(p)}
     end
 
     def random
