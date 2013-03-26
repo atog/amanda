@@ -58,6 +58,7 @@ module Amanda::Controllers
 
   class Tag < R '/tag/(.+)'
     def get(tag)
+      @last = $store.last
       @posts = $store.posts_for_tag(tag)
       render :multiple
     end
@@ -205,6 +206,7 @@ module Amanda::Views
   end
 
   def multiple
+    p {a(href: URL(@last.url).to_s, title: @last.title, class: "last") { "Laatste: #{@last.title}" }}
     count = @posts.length-1
     @posts.each_with_index do |post, i|
       render_post post
