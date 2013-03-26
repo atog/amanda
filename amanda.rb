@@ -80,13 +80,14 @@ module Amanda::Controllers
 
   class Archive < R '/archive'
     def get
+      @posts = $store.posts
       render :archive
     end
   end
 
   class Feed < R '/feed'
     def get
-      Amanda::Feed.rss $store.posts, title: "Koen Van der Auwera's blog", author: "Koen Van der Auwera", url: URL("/").to_s
+      Amanda::Feed.rss $store.posts(9), title: "Koen Van der Auwera's blog", author: "Koen Van der Auwera", url: URL("/").to_s
     end
   end
 
@@ -221,7 +222,7 @@ module Amanda::Views
 
   def archive
     ul class: "archive-list" do
-      $store.posts.each {|p| li {a(href: URL(p.url).to_s, title: p.title) { "#{p.published_date} &rarr; #{p.title}" }}}
+      @posts.each {|p| li {a(href: URL(p.url).to_s, title: p.title) { "#{p.published_date} &rarr; #{p.title}" }}}
     end
   end
 end

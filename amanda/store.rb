@@ -48,8 +48,8 @@ module Amanda
       Post.from_json(redis.get(redis_post_id))
     end
 
-    def posts
-      redis.zrevrange(POSTS_KEY, 0, -1).map{|p| post(p)}
+    def posts(count=-1)
+      redis.zrevrange(POSTS_KEY, 0, count).map{|p| post(p)}
     end
 
     def random
