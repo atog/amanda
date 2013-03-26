@@ -29,6 +29,10 @@ module Amanda
       @published_at ||= Time.mktime(*(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/.match(id).captures))
     end
 
+    def published_date
+      id.gsub(/(\d{4})(\d{2})(\d{2})(\d{4})/, "\\1-\\2-\\3")
+    end
+
     def html
       @html ||= RDiscount.new(content, :smart).to_html
     end

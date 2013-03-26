@@ -126,7 +126,7 @@ module Amanda::Views
         meta :"http-equiv" => "X-UA-Compatible", content: "IE=edge,chrome=1"
         meta name: "description", content: "Koen Van der Auwera blog"
         link rel: "alternate", type: "application/rss+xml", title: "RSS", href: URL("/feed").to_s
-        title { defined?(@post) && @post ? @post.title : "AMANDA" }
+        title { defined?(@post) && @post ? @post.title : "Koen Van der Auwera's blog" }
         link rel: "stylesheet", type: "text/css", href: "/s/m.css"
       end
       body do
@@ -218,7 +218,7 @@ module Amanda::Views
 
   def archive
     ul class: "archive-list" do
-      $store.posts.each {|p| li {a(href: URL(p.url).to_s, title: p.title) { p.title }}}
+      $store.posts.each {|p| li {a(href: URL(p.url).to_s, title: p.title) { "#{p.published_date} &rarr; #{p.title}" }}}
     end
   end
 end

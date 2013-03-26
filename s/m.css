@@ -116,16 +116,16 @@ hr {
   margin: 2em 0;
 }
 
-div#tags li {
-  display: inline;
+div#content ul.tag-list li {
+  display: inline-block;
   margin: 0 5px 0 0;
   padding: 2px;
-  font-size: 0.8em;
 }
 
 div#tags a {
   color: #363637;
   border: none;
+  font-size: 0.8em;
 }
 
 div#tags a:hover {
