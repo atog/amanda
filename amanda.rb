@@ -87,7 +87,7 @@ module Amanda::Controllers
 
   class Feed < R '/feed'
     def get
-      Amanda::Feed.rss $store.posts(9), title: "Koen Van der Auwera's blog", author: "Koen Van der Auwera", url: URL("/").to_s
+      Amanda::Feed.rss $store.posts(9), title: "Koen Van der Auwera's blog", author: ENV["AUTHOR"], url: URL("/").to_s
     end
   end
 
@@ -126,9 +126,9 @@ module Amanda::Views
       head do
         meta charset: "utf-8"
         meta :"http-equiv" => "X-UA-Compatible", content: "IE=edge,chrome=1"
-        meta name: "description", content: "Koen Van der Auwera blog"
+        meta name: "description", content: ENV["TITLE"]
         link rel: "alternate", type: "application/rss+xml", title: "RSS", href: URL("/feed").to_s
-        title { defined?(@post) && @post ? @post.title : "Koen Van der Auwera's blog" }
+        title { defined?(@post) && @post ? @post.title : ENV["TITLE"] }
         link rel: "stylesheet", type: "text/css", href: "/s/m.css"
       end
       body do
@@ -158,7 +158,7 @@ module Amanda::Views
       a(href: "#", title: "Amanda"){ "Amanda" }
     end
     p do
-      "&copy; 2003 - 2013 Koen Van der Auwera"
+      "&copy; #{ENV["AUTHOR"]}"
     end
   end
 
