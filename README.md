@@ -33,7 +33,7 @@ Push the app to [Heroku](http://heroku.com) and [configure following environment
         REDIS_SERVICE=OPENREDIS_URL # set your redis service
         AUTHOR=Koen Van der Auwera
         TITLE=Koen Van der Auwera's blog
-        HAVEAMINT=http://your.mint.installation.url/?js
+        HAVEAMINT=http://your.mint.installation.url/?js # optional!
         SECRET=Some super session secret
         REFRESH_PATH=/refresh
 
