@@ -146,7 +146,7 @@ module Amanda::Views
     div.nav! do
       ul class: "nav-list" do
         li {a(href: URL("/").to_s, title: "Home") { "Home" }}
-        li {a(href: URL("/archive").to_s, title: "Archief") { "Archief" }}
+        li {a(href: URL("/archive").to_s, title: "Archive") { "Archive" }}
         li {a(href: URL("/tags").to_s, title: "Tags") { "Tags" }}
       end
     end
