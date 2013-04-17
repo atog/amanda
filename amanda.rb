@@ -71,7 +71,7 @@ module Amanda::Controllers
     end
   end
 
-  class Refresh < R '/refresh'
+  class Refresh < R ENV["REFRESH_PATH"]
     def get
       $store.refresh_from_dropbox
       redirect "/"
@@ -109,7 +109,7 @@ module Amanda::Controllers
       if session = @state["dropbox"]
         session.get_access_token
         $store.dropbox_session(session)
-        redirect "/refresh"
+        redirect ENV["REFRESH_PATH"]
       else
         "TUUT"
       end
