@@ -37,6 +37,10 @@ Push the app to [Heroku](http://heroku.com) and [configure following environment
         SECRET=Some super session secret
         REFRESH_PATH=/refresh
 
+## Example
+
+[My blog](http://blog.atog.be).
+
 ## The MIT License (MIT)
 Copyright (c) 2013 Koen Van der Auwera
 
