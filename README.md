@@ -25,16 +25,16 @@ To publish your new post hit the configured refresh url, e.g. http://blog.exampl
 
 Push the app to [Heroku](http://heroku.com) and [configure following environment variables](https://devcenter.heroku.com/articles/config-vars):
 
-  :::markdown
-  DROPBOX_APP_KEY=your_dropbox_app_key
-  DROPBOX_APP_SECRET=your_dropbox_app_secret
-  OPENREDIS_URL=redis://127.0.0.1:6379 # set by Heroku on choosing service
-  REDIS_SERVICE=OPENREDIS_URL # set your redis service
-  AUTHOR=Koen Van der Auwera
-  TITLE=Koen Van der Auwera's blog
-  HAVEAMINT=http://your.mint.installation.url/?js
-  SECRET=Some super session secret
-  REFRESH_PATH=/refresh
+    :::markdown
+        DROPBOX_APP_KEY=your_dropbox_app_key
+        DROPBOX_APP_SECRET=your_dropbox_app_secret
+        OPENREDIS_URL=redis://127.0.0.1:6379 # set by Heroku on choosing service
+        REDIS_SERVICE=OPENREDIS_URL # set your redis service
+        AUTHOR=Koen Van der Auwera
+        TITLE=Koen Van der Auwera's blog
+        HAVEAMINT=http://your.mint.installation.url/?js
+        SECRET=Some super session secret
+        REFRESH_PATH=/refresh
 
 ## The MIT License (MIT)
 Copyright (c) 2013 Koen Van der Auwera
