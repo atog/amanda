@@ -137,7 +137,7 @@ module Amanda::Views
           div.content! { self << yield }
           div.footer! { render_footer }
         end
-        script src: "http://mint.atog.be/?js", type: "text/javascript"
+        script src: ENV["HAVEAMINT"], type: "text/javascript" if ENV["HAVEAMINT"]
       end
     end
   end
