@@ -11,6 +11,7 @@ Create a new markdown file with filename in the following format: `%Y%m%d%H%M.md
 First lines must contain the `title`, `date` and can contain `tags` and / or `slug`. Followed by your post.
 
 e.g.
+
     :::markdown
         Title: Hello World
         Date: 2013-04-17 22:57
