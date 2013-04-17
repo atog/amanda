@@ -43,6 +43,10 @@ Push the app to [Heroku](http://heroku.com) and [configure following environment
 
 [My blog](http://blog.atog.be).
 
+## More
+
+Fixes? Questions? Improvements? Let me know. Please.
+
 ## The MIT License (MIT)
 Copyright (c) 2013 Koen Van der Auwera
 
