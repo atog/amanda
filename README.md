@@ -1,3 +1,40 @@
+# Amanda
+
+Simple Blog engine powered by [Camping](http://camping.io).
+
+Posts are written in [Markdown](http://daringfireball.net/projects/markdown/), saved on [Dropbox](https://www.dropbox.com/) and stored in [Redis](http://redis.io).
+
+## Usage
+
+Create a new markdown file with filename in the following format: `%Y%m%d%H%M.md` in the Amanda dropbox folder.
+
+First lines must contain the `title`, `date` and can contain `tags' and / or 'slug'. Followed by your post.
+
+e.g.
+
+  Title: Hello World
+  Date: 2013-04-17 22:57
+  Tags: tags, are, comma, separated
+  Slug: this-slug-is-optional
+
+  Hello World, first post!
+
+To publish your new post hit the configured refresh url, e.g. http://blog.example.com/{your_refresh_path}
+
+## Deploy on heroku
+
+Push the app to [Heroku](http://heroku.com) and [configure following environment variables](https://devcenter.heroku.com/articles/config-vars):
+
+  DROPBOX_APP_KEY=your_dropbox_app_key
+  DROPBOX_APP_SECRET=your_dropbox_app_secret
+  OPENREDIS_URL=redis://127.0.0.1:6379 # set by Heroku on choosing service
+  REDIS_SERVICE=OPENREDIS_URL # set your redis service
+  AUTHOR=Koen Van der Auwera
+  TITLE=Koen Van der Auwera's blog
+  HAVEAMINT=http://your.mint.installation.url/?js
+  SECRET=Some super session secret
+  REFRESH_PATH=/refresh
+
 ## The MIT License (MIT)
 Copyright (c) 2013 Koen Van der Auwera
 
