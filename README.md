@@ -11,13 +11,13 @@ Create a new markdown file with filename in the following format: `%Y%m%d%H%M.md
 First lines must contain the `title`, `date` and can contain `tags` and / or `slug`. Followed by your post.
 
 e.g.
+    :::markdown
+        Title: Hello World
+        Date: 2013-04-17 22:57
+        Tags: tags, are, comma, separated
+        Slug: this-slug-is-optional
 
-  Title: Hello World
-  Date: 2013-04-17 22:57
-  Tags: tags, are, comma, separated
-  Slug: this-slug-is-optional
-
-  Hello World, first post!
+        Hello World, first post!
 
 To publish your new post hit the configured refresh url, e.g. http://blog.example.com/{your_refresh_path}
 
