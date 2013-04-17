@@ -22,6 +22,8 @@ e.g.
 
 To publish your new post hit the configured refresh url, e.g. http://blog.example.com/{your_refresh_path}
 
+On the index page it always shows the most recent post and one random post.
+
 ## Deploy on heroku
 
 Push the app to [Heroku](http://heroku.com) and [configure following environment variables](https://devcenter.heroku.com/articles/config-vars):
