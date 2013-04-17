@@ -27,7 +27,7 @@ module Amanda
     end
 
     def redis
-      @redis ||= Redis.connect(:url => ENV["OPENREDIS_URL"])
+      @redis ||= Redis.connect(:url => ENV[ENV["REDIS_SERVICE"]])
     end
 
     def keys(pattern="*")
