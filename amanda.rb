@@ -14,7 +14,7 @@ require_relative 'amanda/feed'
 Camping.goes :Amanda
 
 module Amanda
-  set :secret, "Some super secret, even more. No. MORE!"
+  set :secret, ENV["SECRET"]
   include Camping::Session
   include Amanda::Helper
   $store = Amanda::Store.new
@@ -87,7 +87,7 @@ module Amanda::Controllers
 
   class Feed < R '/feed'
     def get
-      Amanda::Feed.rss $store.posts(9), title: "Koen Van der Auwera's blog", author: ENV["AUTHOR"], url: URL("/").to_s
+      Amanda::Feed.rss $store.posts(9), title: ENV["TITLE"], author: ENV["AUTHOR"], url: URL("/").to_s
     end
   end
 
