@@ -8,7 +8,7 @@ Posts are written in [Markdown](http://daringfireball.net/projects/markdown/), s
 
 Create a new markdown file with filename in the following format: `%Y%m%d%H%M.md` in the Amanda dropbox folder.
 
-First lines must contain the `title`, `date` and can contain `tags' and / or 'slug'. Followed by your post.
+First lines must contain the `title`, `date` and can contain `tags` and / or `slug`. Followed by your post.
 
 e.g.
 
@@ -25,6 +25,7 @@ To publish your new post hit the configured refresh url, e.g. http://blog.exampl
 
 Push the app to [Heroku](http://heroku.com) and [configure following environment variables](https://devcenter.heroku.com/articles/config-vars):
 
+  :::markdown
   DROPBOX_APP_KEY=your_dropbox_app_key
   DROPBOX_APP_SECRET=your_dropbox_app_secret
   OPENREDIS_URL=redis://127.0.0.1:6379 # set by Heroku on choosing service
