@@ -155,7 +155,7 @@ module Amanda::Views
   def render_footer
     p do
       "Powered by " +
-      a(href: "#", title: "Amanda"){ "Amanda" }
+      a(href: "https://bitbucket.org/atog/amanda", title: "Amanda"){ "Amanda" }
     end
     p do
       "&copy; #{ENV["AUTHOR"]}"
