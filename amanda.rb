@@ -37,9 +37,11 @@ module Amanda::Controllers
     def get
       if $store.dropbox_session
         @last = $store.last
-        @random = $store.random
-        while @random.id == @last.id
-          @random =  $store.random
+        if $store.posts.size > 1
+          @random = $store.random
+          while @random.id == @last.id
+            @random =  $store.random
+          end
         end
         render :index
       else
@@ -199,7 +201,7 @@ module Amanda::Views
       div.tags! {render_tags(@last.tags_to_arr) }
     end
     hr
-    render_post @random, "Random"
+    render_post @random, "Random" if @random
   end
 
   def single
