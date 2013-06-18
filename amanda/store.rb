@@ -71,9 +71,13 @@ module Amanda
 
     def read_posts_from_dropbox
       posts = []
+      metadata_params = ['/', 25000, true, nil, nil, true]
       client = DropboxClient.new(dropbox_session, :app_folder)
-      client.metadata('/')["contents"].map{|f| [f["path"], f["rev"]]}.select{|f| f[0] =~ /\d{12}\.md$/}.each do |path|
-        if changed?(Post.id_from_filename(path[0]), path[1])
+      metadata = client.metadata(*metadata_params)["contents"].map{|f| [f["path"], f["rev"], f["is_deleted"] || false]}
+      metadata.select{|f| f[0] =~ /\d{12}\.md$/}.each do |path|
+        if path[2]
+          delete_post_in_redis(Post.id_from_filename(path[0]), path[1])
+        elsif changed?(Post.id_from_filename(path[0]), path[1])
           contents, meta = client.get_file_and_metadata(path[0])
           posts << Post.parse(path[0], contents)
         end
@@ -99,16 +103,32 @@ module Amanda
       posts
     end
 
+    def post_key(post_id)
+      "#{POST_KEY_PREFIX}#{post_id}"
+    end
+
+    def delete_post_in_redis(post_id, rev)
+      redis.del post_key(post_id)
+      redis.zrem POSTS_KEY, post_key(post_id)
+      redis.srem POSTS_RANDOM, post_key(post_id)
+      if redis.get(POSTS_LAST_KEY) == post_key(post_id)
+        redis.set POSTS_LAST_KEY, redis.zrange(POSTS_KEY, -1, -1).first
+      end
+      redis.keys("#{TAG_KEY_PREFIX}*").each do |tag_key|
+        redis.zrem tag_key, post_key(post_id)
+      end
+    end
+
     def store_posts_in_redis(rposts)
       if rposts.any?
         rposts.each do |post|
-          redis.set "#{POST_KEY_PREFIX}#{post.id}", post.to_json
-          redis.zadd POSTS_KEY, post.id, "#{POST_KEY_PREFIX}#{post.id}"
-          redis.sadd POSTS_RANDOM, "#{POST_KEY_PREFIX}#{post.id}"
-          redis.set POSTS_LAST_KEY, "#{POST_KEY_PREFIX}#{post.id}"
+          redis.set post_key(post.id), post.to_json
+          redis.zadd POSTS_KEY, post.id, post_key(post.id)
+          redis.sadd POSTS_RANDOM, post_key(post.id)
+          redis.set POSTS_LAST_KEY, post_key(post.id)
           post.tags_to_arr.each do |tag|
             redis.sadd TAGS_KEY, tag
-            redis.zadd "#{TAG_KEY_PREFIX}#{parameterize(tag)}", post.id, "#{POST_KEY_PREFIX}#{post.id}"
+            redis.zadd "#{TAG_KEY_PREFIX}#{parameterize(tag)}", post.id, post_key(post.id)
           end
         end
       end
