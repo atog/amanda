@@ -40,7 +40,7 @@ module Amanda::Controllers
         if $store.posts.size > 1
           @random = $store.random
           while @random.id == @last.id
-            @random =  $store.random
+            @random = $store.random
           end
         end
         render :index
