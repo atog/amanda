@@ -37,6 +37,7 @@ module Amanda::Controllers
     def get
       if $store.dropbox_session
         @last = $store.last
+        @recent = $store.posts(5).drop(1)
         if $store.posts.size > 1
           @random = $store.random
           while @random.id == @last.id
@@ -199,6 +200,12 @@ module Amanda::Views
       div.content! { @last.html }
       div.meta! { render_meta(@last) }
       div.tags! {render_tags(@last.tags_to_arr) }
+    end
+    hr
+    div.post! do
+      ul class: "archive-list" do
+        @recent.each {|p| li {a(href: URL(p.url).to_s, title: p.title) { "#{p.published_date} &rarr; #{p.title}" }}}
+      end
     end
     hr
     render_post @random, "Random" if @random
