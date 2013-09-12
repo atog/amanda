@@ -133,32 +133,6 @@ div#tags a:hover {
   border: none;
 }
 
-@media (max-width:480px) {
-  div#nav {
-    width: 478px;
-  }
-
-  div#content {
-    width: 478px;
-    margin: 15px auto;
-    line-height: 20px;
-  }
-
-  div#content h2 {
-    padding-bottom: 8px;
-    width: 350px;
-  }
-
-  div#content img {
-    width: 478px;
-  }
-
-  div#meta {
-    padding-top: 5px;
-    width: 350px;
-  }
-}
-
 @media (max-width:767px) {
   div#nav {
     width: 500px;
@@ -182,5 +156,41 @@ div#tags a:hover {
   div#meta {
     padding-top: 5px;
     width: 350px;
+  }
+}
+
+@media (max-width:480px) {
+  div#nav {
+    width: 100%;
+  }
+
+  div#nav li {
+    display: inline;
+    margin: 10px;
+    padding: 2px;
+  }
+
+  div#post {
+    padding: 0 10px;
+  }
+
+  div#content {
+    width: 100%;
+    margin: 15px 0;
+    line-height: 27px;
+  }
+
+  div#content h2 {
+    padding-bottom: 8px;
+    width: 100%;
+  }
+
+  div#content img {
+    width: 100%;
+  }
+
+  div#meta {
+    padding-top: 5px;
+    width: 100%;
   }
 }
