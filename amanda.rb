@@ -129,6 +129,7 @@ module Amanda::Views
       head do
         meta charset: "utf-8"
         meta :"http-equiv" => "X-UA-Compatible", content: "IE=edge,chrome=1"
+        meta name: "viewport", content: "width=device-width"
         meta name: "description", content: ENV["TITLE"]
         link rel: "alternate", type: "application/rss+xml", title: "RSS", href: URL("/feed").to_s
         title { defined?(@post) && @post ? @post.title : ENV["TITLE"] }
