@@ -90,11 +90,15 @@ module Amanda::Controllers
 
   class Feed < R '/feed'
     def get
-      if request.user_agent =~ /(FeedPress|FeedValidator)/
-        @headers['Content-Type'] = 'application/xml'
-        Amanda::Feed.rss $store.posts(9), title: ENV["TITLE"], author: ENV["AUTHOR"], url: URL("/").to_s
+      if ENV["FEEDPRESS_URL"]
+        if request.user_agent =~ /(FeedPress|FeedValidator)/
+          @headers['Content-Type'] = 'application/xml'
+          Amanda::Feed.rss $store.posts(9), title: ENV["TITLE"], author: ENV["AUTHOR"], url: URL("/").to_s
+        else
+          redirect ENV["FEEDPRESS_URL"]
+        end
       else
-        redirect "http://feedpress.me/atog"
+        Amanda::Feed.rss $store.posts(9), title: ENV["TITLE"], author: ENV["AUTHOR"], url: URL("/").to_s
       end
     end
   end

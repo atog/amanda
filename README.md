@@ -36,6 +36,7 @@ Push the app to [Heroku](http://heroku.com) and [configure following environment
     HAVEAMINT=http://your.mint.installation.url/?js # optional!
     SECRET=Some super session secret
     REFRESH_PATH=/refresh
+    FEEDPRESS_URL=http://feedpress.me/atog
 
 ## Example
 
