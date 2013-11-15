@@ -224,6 +224,21 @@ module Amanda::Views
   def single
     p {a(href: URL(@last.url).to_s, title: @last.title, class: "last") { "Laatste: #{@last.title}" }} unless @last.id == @post.id
     render_post(@post)
+    if ENV["DISQUS_SHORTNAME"]
+      hr
+      div.disqus_thread!
+      script type: "text/javascript" do
+      %Q{
+          var disqus_shortname = '#{ENV["DISQUS_SHORTNAME"]}'; // required: replace example with your forum shortname
+          var disqus_url = '#{URL(@post.url).to_s}';
+          (function() {
+              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+              dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      }
+      end
+    end
   end
 
   def multiple
