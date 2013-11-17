@@ -37,6 +37,7 @@ Push the app to [Heroku](http://heroku.com) and [configure following environment
     SECRET=Some super session secret
     REFRESH_PATH=/refresh
     FEEDPRESS_URL=http://feedpress.me/atog
+    DISQUS_SHORTNAME=atog
 
 ## Example
 
